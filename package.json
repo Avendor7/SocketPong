@@ -1,5 +1,5 @@
 {
-  "name": "pongmultimatch",
+  "name": "socketpong",
   "version": "1.0.0",
   "description": "Simple Pong clone utilizing NodeJS and Socket.io websockets for multiplayer matchmaking.",
   "main": "index.js",
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/step1041/PongMultiMatch.git"
+    "url": "git+https://github.com/step1041/socketpong.git"
   },
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/step1041/PongMultiMatch/issues"
+    "url": "https://github.com/step1041/socketpong/issues"
   },
-  "homepage": "https://github.com/step1041/PongMultiMatch#readme",
+  "homepage": "https://github.com/step1041/socketpong#readme",
   "dependencies": {
     "express": "^4.15.2",
     "socket.io": "^2.0.1"

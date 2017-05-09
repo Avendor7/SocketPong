@@ -1,4 +1,4 @@
-# PongMultiMatch
+# Socket Pong
 
 Simple Pong clone utilizing NodeJS and Socket.io websockets for multiplayer matchmaking.
 
@@ -19,13 +19,13 @@ Nodejs
 Clone repo
 
 ```
-https://github.com/step1041/PongMultiMatch.git
+https://github.com/step1041/SocketPong.git
 ```
 
 Install dependencies
 
 ```
-cd PongMultiMatch
+cd SocketPong
 npm install
 ```
 ## License
