@@ -14,15 +14,15 @@ function init() {
 
 //main game object
 var game = {
-    canvas : document.createElement("canvas"),
+    canvas : document.getElementById("pong"),
     start : function() {
-        //set width to the container width
-        this.canvas.style.width = '100%';
-        //set height to the window height
-        this.canvas.height = window.innerHeight;
+        this.canvas.width = 1280;
+        this.canvas.height = 720;
         this.context = this.canvas.getContext("2d");
-        document.body.insertBefore(this.canvas, document.body.childNodes[0]);
         this.interval = setInterval(update, 20);
+
+        this.context.fillStyle= 'black';
+        this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
         //input
         window.addEventListener('keydown', function (e) {
