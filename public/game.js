@@ -11,7 +11,6 @@ function init() {
     game.start();
 }
 
-
 //main game object
 var game = {
     canvas : document.getElementById("pong"),
@@ -41,7 +40,64 @@ var game = {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
 }
+
+//game object
+function component(width, height, color, x, y) {
+    //object attributes
+    this.width = width;
+    this.height = height;
+    this.speedX = 0;
+    this.speedY = 0; 
+    this.x = x;
+    this.y = y;
+
+    //functions called by update loop
+    this.update = function() {
+        context = game.context;
+        context.fillStyle = color;
+        context.fillRect(this.x, this.y, this.width, this.height);
+    }
+    this.newPos = function() {
+        this.x += this.speedX;
+        this.y += this.speedY; 
+    }
+
+    //check for collison with another object 
+    this.crashWith = function(otherobj) {
+        //
+        var myleft = this.x;
+        var myright = this.x + (this.width);
+        var mytop = this.y;
+        var mybottom = this.y + (this.height);
+
+        var otherleft = otherobj.x;
+        var otherright = otherobj.x + (otherobj.width);
+        var othertop = otherobj.y;
+        var otherbottom = otherobj.y + (otherobj.height);
+
+        //should maybe re-write this to assume false, rather than assume true and prove wrong - may reduce any possible false positives
+        var crash = true;
+        
+        if ((mybottom < othertop) ||
+               (mytop > otherbottom) ||
+               (myright < otherleft) ||
+               (myleft > otherright)) {
+           crash = false;
+        }
+
+        return crash;
+    }
+}
+
 //update loop
 function update(){
-
+    //if collision, stop the game, else, update all the things
+    if (myGamePiece.crashWith(myObstacle)) {
+        myGameArea.stop();
+    } else {
+        myGameArea.clear();
+        myObstacle.update();
+        myGamePiece.newPos(); 
+        myGamePiece.update();
+    }
 }
