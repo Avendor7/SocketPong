@@ -8,6 +8,13 @@ var player2Score;
 
 //initialize all the things
 function init() {
+
+    //game pieces
+    player1Paddle = new component(20, 100, "white", 70, 120);
+    player2Paddle = new component(20, 100, "white", 1200, 120);
+
+    player1Score = new scoreNumbers(30, 30, "green", 10, 120);
+    player2Score = new scoreNumbers(30, 30, "green", 10, 120);
     game.start();
 }
 
@@ -19,19 +26,19 @@ var game = {
         this.canvas.height = 720;
         this.context = this.canvas.getContext("2d");
         this.interval = setInterval(update, 20);
-
+        //background
         this.context.fillStyle= 'black';
         this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
         //input
-        window.addEventListener('keydown', function (e) {
-            e.preventDefault();
-            game.keys = (game.keys || []);
-            game.keys[e.keyCode] = (e.type == "keydown");
-        })
-        window.addEventListener('keyup', function (e) {
-            game.keys[e.keyCode] = (e.type == "keydown");
-        })
+        // window.addEventListener('keydown', function (e) {
+        //     e.preventDefault();
+        //     game.keys = (game.keys || []);
+        //     game.keys[e.keyCode] = (e.type == "keydown");
+        // });
+        // window.addEventListener('keyup', function (e) {
+        //     game.keys[e.keyCode] = (e.type == "keydown");
+        // });
     },
     stop : function() {
         clearInterval(this.interval);
@@ -39,6 +46,10 @@ var game = {
     clear : function() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
+}
+
+function scoreNumbers(score,x,y){
+
 }
 
 //game object
@@ -92,12 +103,14 @@ function component(width, height, color, x, y) {
 //update loop
 function update(){
     //if collision, stop the game, else, update all the things
-    if (myGamePiece.crashWith(myObstacle)) {
-        myGameArea.stop();
-    } else {
-        myGameArea.clear();
-        myObstacle.update();
-        myGamePiece.newPos(); 
-        myGamePiece.update();
-    }
+    // if (myGamePiece.crashWith(myObstacle)) {
+    //     myGameArea.stop();
+    // } else {
+    //     myGameArea.clear();
+    //     myObstacle.update();
+    //     myGamePiece.newPos(); 
+    //     myGamePiece.update();
+    // }
+    player1Paddle.update();
+    player2Paddle.update();
 }
