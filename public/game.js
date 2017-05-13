@@ -10,8 +10,8 @@ var player2Score;
 function init() {
 
     //game pieces
-    player1Paddle = new component(20, 100, "white", 60, 120);
-    player2Paddle = new component(20, 100, "black", 1200, 120);
+    leftPaddle = new component(20, 100, "white", 60, 120);
+    rightPaddle = new component(20, 100, "white", 1200, 120);
 
     player1Score = new scoreNumbers(30, 30, "green", 10, 120);
     player2Score = new scoreNumbers(30, 30, "green", 10, 120);
@@ -113,13 +113,15 @@ function update(){
     // }
     game.clear();
 
-    player1Paddle.speed = 0;
+    rightPaddle.speed = 0;
+    //leftPaddle.speed = 0;
     
-    if (game.keys && game.keys[38]) {player1Paddle.speed = -10; }
-    if (game.keys && game.keys[40]) {player1Paddle.speed = 10; }
-    player1Paddle.newPos();
-    player1Paddle.update();
+    if (game.keys && game.keys[38]) {rightPaddle.speed = -10; }
+    if (game.keys && game.keys[40]) {rightPaddle.speed = 10; }
 
-    player2Paddle.newPos();
-    player2Paddle.update();
+    leftPaddle.newPos();
+    leftPaddle.update();
+
+    rightPaddle.newPos();
+    rightPaddle.update();
 }
