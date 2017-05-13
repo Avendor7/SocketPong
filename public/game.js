@@ -5,8 +5,8 @@ function init() {
     leftPaddle = new component(20, 100, "white", 60, 120);
     rightPaddle = new component(20, 100, "white", 1200, 120);
     ball = new component(10, 10, "white", 300, 300);
-    player1Score = new scoreNumbers(30, 30, "green", 10, 120);
-    player2Score = new scoreNumbers(30, 30, "green", 10, 120);
+    rightScore = new scoreNumbers(3, 320, 80);
+    leftScore = new scoreNumbers(4, 960, 80);
     
     //start the game
     game.start();
@@ -50,8 +50,17 @@ var game = {
     }
 }
 
-function scoreNumbers(score,x,y){
-
+function scoreNumbers(score, x, y){
+    context = game.context;
+    this.x = x;
+    this.y = y;
+    this.score = score;
+    
+    this.update = function() {
+        context.fillStyle = "white";
+        context.font = "bold 80px Arial";
+        context.fillText(this.score, this.x, this.y);
+    }
 }
 
 function net(){
@@ -135,8 +144,13 @@ function update(){
             //DISABLED FOR NOW, testing is easier with the keyboard
             //rightPaddle.y = game.y; 
         }
-        net();
 
+        //draw / update game objects
+        net();
+        
+        rightScore.update();
+        leftScore.update();
+        
         ball.newPos();
         ball.update();
 
