@@ -114,7 +114,7 @@ function update(){
     game.clear();
 
     rightPaddle.speed = 0;
-    //leftPaddle.speed = 0;
+    leftPaddle.speed = 0;
     
     if (game.keys && game.keys[38]) {rightPaddle.speed = -10; }
     if (game.keys && game.keys[40]) {rightPaddle.speed = 10; }
