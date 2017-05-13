@@ -1,20 +1,12 @@
-//game objects
-var paddle1;
-var paddle2;
-var ball;
-var divider;
-var player1Score;
-var player2Score;
-
 //initialize all the things
 function init() {
 
     //game pieces
-    leftPaddle = new component(20, 100, "white", 60, 120);
-    rightPaddle = new component(20, 100, "white", 1200, 120);
+    var leftPaddle = new component(20, 100, "white", 60, 120);
+    var rightPaddle = new component(20, 100, "white", 1200, 120);
 
-    player1Score = new scoreNumbers(30, 30, "green", 10, 120);
-    player2Score = new scoreNumbers(30, 30, "green", 10, 120);
+    var player1Score = new scoreNumbers(30, 30, "green", 10, 120);
+    var player2Score = new scoreNumbers(30, 30, "green", 10, 120);
     
     //start the game
     game.start();
@@ -26,12 +18,14 @@ var game = {
     start : function() {
         this.canvas.width = 1280;
         this.canvas.height = 720;
+        this.canvas.style.cursor = "none"; //hide cursor
         this.context = this.canvas.getContext("2d");
         this.interval = setInterval(update, 20);
         //background
         this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
         //input
+        //Keyboard
         window.addEventListener('keydown', function (e) {
             e.preventDefault();
             game.keys = (game.keys || []);
@@ -39,6 +33,11 @@ var game = {
         });
         window.addEventListener('keyup', function (e) {
             game.keys[e.keyCode] = (e.type == "keydown");
+        });
+        //mouse
+        window.addEventListener('mousemove', function (e) {
+            game.x = e.pageX;
+            game.y = e.pageY;
         });
     },
     stop : function() {
@@ -103,21 +102,28 @@ function component(width, height, color, x, y) {
 //update loop
 function update(){
     //if collision, stop the game, else, update all the things
-    // if (myGamePiece.crashWith(myObstacle)) {
-    //     mygame.stop();
-    // } else {
-    //     mygame.clear();
-    //     myObstacle.update();
-    //     myGamePiece.newPos(); 
-    //     myGamePiece.update();
-    // }
+    if (myGamePiece.crashWith(myObstacle)) {
+        mygame.stop();
+    } else {
+        mygame.clear();
+        myObstacle.update();
+        myGamePiece.newPos(); 
+        myGamePiece.update();
+    }
     game.clear();
 
     rightPaddle.speed = 0;
     leftPaddle.speed = 0;
     
+    //keyboard movement
     if (game.keys && game.keys[38]) {rightPaddle.speed = -10; }
     if (game.keys && game.keys[40]) {rightPaddle.speed = 10; }
+
+    //mouse movement, y axis only
+    if (game.y) {
+        //DISABLED FOR NOW, testing is easier with the keyboard
+        //rightPaddle.y = game.y; 
+    }
 
     leftPaddle.newPos();
     leftPaddle.update();
