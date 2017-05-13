@@ -55,13 +55,15 @@ function scoreNumbers(score,x,y){
 }
 
 function net(){
+    context = game.context;
     //broken centre line 
-    this.context.beginPath();
-    this.context.strokeSyle = 'white';
-    this.context.setLineDash([5, 15]);
-    this.context.moveTo(640, 0);
-    this.context.lineTo(640, 720);
-    this.context.stroke();
+    context.beginPath();
+    context.strokeStyle = 'white';
+    context.lineWidth = 5;
+    context.setLineDash([20, 20]);
+    context.moveTo(640, 10);
+    context.lineTo(640, 720);
+    context.stroke();
 }
 //game object
 function component(width, height, color, x, y) {
@@ -117,7 +119,7 @@ function update(){
         game.stop();
     } else {
         game.clear();
-        ball.update();
+        
 
         rightPaddle.speedY = 0;
         leftPaddle.speedY = 0;
@@ -133,7 +135,11 @@ function update(){
             //DISABLED FOR NOW, testing is easier with the keyboard
             //rightPaddle.y = game.y; 
         }
-       // net();
+        net();
+
+        ball.newPos();
+        ball.update();
+
         leftPaddle.newPos();
         leftPaddle.update();
 
