@@ -8,3 +8,22 @@ A: Make use of the screen real-estate on mobile without having to turn the phone
 Q: Why not use a game library/engine
 A: I haven't really worked with any and wanted to keep the project as simple as possible, same goes for Express and is static files.
 
+
+
+
+
+
+Data to server
+
+    -player paddle x and y
+
+Server processes
+   
+    - collisions
+    - scoring
+
+Data to client
+   
+    -scores
+    -2nd player x and y
+    -ball x and y
