@@ -2,11 +2,11 @@
 function init() {
 
     //game pieces
-    var leftPaddle = new component(20, 100, "white", 60, 120);
-    var rightPaddle = new component(20, 100, "white", 1200, 120);
-
-    var player1Score = new scoreNumbers(30, 30, "green", 10, 120);
-    var player2Score = new scoreNumbers(30, 30, "green", 10, 120);
+    leftPaddle = new component(20, 100, "white", 60, 120);
+    rightPaddle = new component(20, 100, "white", 1200, 120);
+    ball = new component(10, 10, "white", 300, 300);
+    player1Score = new scoreNumbers(30, 30, "green", 10, 120);
+    player2Score = new scoreNumbers(30, 30, "green", 10, 120);
     
     //start the game
     game.start();
@@ -94,7 +94,7 @@ function component(width, height, color, x, y) {
                (myleft > otherright)) {
            crash = false;
         }
-
+        console.log(crash);
         return crash;
     }
 }
@@ -102,32 +102,31 @@ function component(width, height, color, x, y) {
 //update loop
 function update(){
     //if collision, stop the game, else, update all the things
-    if (myGamePiece.crashWith(myObstacle)) {
-        mygame.stop();
+    if (rightPaddle.crashWith(ball)) {
+        game.stop();
     } else {
-        mygame.clear();
-        myObstacle.update();
-        myGamePiece.newPos(); 
-        myGamePiece.update();
-    }
-    game.clear();
+        game.clear();
+        ball.update();
 
-    rightPaddle.speed = 0;
-    leftPaddle.speed = 0;
+        rightPaddle.speed = 0;
+        leftPaddle.speed = 0;
+        ball.speed = 5;
+        
+        //keyboard movement
+        if (game.keys && game.keys[38]) {rightPaddle.speed = -10; }
+        if (game.keys && game.keys[40]) {rightPaddle.speed = 10; }
+
+        //mouse movement, y axis only
+        if (game.y) {
+            //DISABLED FOR NOW, testing is easier with the keyboard
+            //rightPaddle.y = game.y; 
+        }
+        console.log(rightPaddle.y);
+        leftPaddle.newPos();
+        leftPaddle.update();
+
+        rightPaddle.newPos();
+        rightPaddle.update();
+    }
     
-    //keyboard movement
-    if (game.keys && game.keys[38]) {rightPaddle.speed = -10; }
-    if (game.keys && game.keys[40]) {rightPaddle.speed = 10; }
-
-    //mouse movement, y axis only
-    if (game.y) {
-        //DISABLED FOR NOW, testing is easier with the keyboard
-        //rightPaddle.y = game.y; 
-    }
-
-    leftPaddle.newPos();
-    leftPaddle.update();
-
-    rightPaddle.newPos();
-    rightPaddle.update();
 }
