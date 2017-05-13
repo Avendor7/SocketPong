@@ -20,11 +20,13 @@ var game = {
         this.canvas.height = 720;
         this.canvas.style.cursor = "none"; //hide cursor
         this.context = this.canvas.getContext("2d");
-        this.interval = setInterval(update, 20);
+        //glorious 60fps (16ms)
+        this.interval = setInterval(update, 16);
         //background
         this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-        //input
+        
+
         //Keyboard
         window.addEventListener('keydown', function (e) {
             e.preventDefault();
@@ -52,6 +54,15 @@ function scoreNumbers(score,x,y){
 
 }
 
+function net(){
+    //broken centre line 
+    this.context.beginPath();
+    this.context.strokeSyle = 'white';
+    this.context.setLineDash([5, 15]);
+    this.context.moveTo(640, 0);
+    this.context.lineTo(640, 720);
+    this.context.stroke();
+}
 //game object
 function component(width, height, color, x, y) {
     //object attributes
@@ -95,7 +106,6 @@ function component(width, height, color, x, y) {
                (myleft > otherright)) {
            crash = false;
         }
-        console.log(crash);
         return crash;
     }
 }
@@ -109,9 +119,10 @@ function update(){
         game.clear();
         ball.update();
 
-        rightPaddle.speed = 0;
-        leftPaddle.speed = 0;
-        ball.speed = 5;
+        rightPaddle.speedY = 0;
+        leftPaddle.speedY = 0;
+        ball.speedX = 5;
+        ball.speedY = 5;
         
         //keyboard movement
         if (game.keys && game.keys[38]) {rightPaddle.speedY = -10; }
@@ -122,7 +133,7 @@ function update(){
             //DISABLED FOR NOW, testing is easier with the keyboard
             //rightPaddle.y = game.y; 
         }
-
+       // net();
         leftPaddle.newPos();
         leftPaddle.update();
 
