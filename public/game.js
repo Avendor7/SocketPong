@@ -18,7 +18,7 @@ var game = {
     start : function() {
         this.canvas.width = 1280;
         this.canvas.height = 720;
-        this.canvas.style.cursor = "none"; //hide cursor
+        //this.canvas.style.cursor = "none"; //hide cursor
         this.context = this.canvas.getContext("2d");
         //glorious 60fps (16ms)
         this.interval = setInterval(update, 16);
@@ -59,10 +59,10 @@ function net(){
     //broken centre line 
     context.beginPath();
     context.strokeStyle = 'white';
-    context.lineWidth = 5;
+    context.lineWidth = 6;
     context.setLineDash([20, 20]);
-    context.moveTo(640, 10);
-    context.lineTo(640, 720);
+    context.moveTo(637, 10);
+    context.lineTo(637, 720);
     context.stroke();
 }
 //game object
