@@ -2,9 +2,9 @@
 function init() {
 
     //game pieces
-    leftPaddle = new component(20, 120, "white", 60, 120);
-    rightPaddle = new component(20, 120, "white", 1200, 120);
-    ball = new component(10, 10, "white", 300, 300);
+    leftPaddle = new component(20, 120, "white", 60, 120, "paddle");
+    rightPaddle = new component(20, 120, "white", 1200, 120, "paddle");
+    ball = new component(10, 10, "white", 300, 300, "ball");
     rightScore = new scoreNumbers(3, 320, 80);
     leftScore = new scoreNumbers(4, 960, 80);
 
@@ -24,8 +24,6 @@ var game = {
         this.interval = setInterval(update, 16);
         //background
         this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
-
-        
 
         //Keyboard
         window.addEventListener('keydown', function (e) {
@@ -75,7 +73,7 @@ function net(){
     context.stroke();
 }
 //game object
-function component(width, height, color, x, y) {
+function component(width, height, color, x, y, type) {
     //object attributes
     this.width = width;
     this.height = height;
@@ -125,18 +123,27 @@ function component(width, height, color, x, y) {
         var mytop = this.y;
         var mybottom = this.y + (this.height);
 
-        var inBounds = true;
+        var collision = false;
 
-        if ((mybottom > 720 - this.height) ||
-            (mytop < 0) ||
-            (myright > 1280 - this.width) ||
-            (myleft < 0)) {
-                inBounds = false;
+        if (type == "paddle" && this.x == 1200){ //right paddle
+            //check for collision with top and bottom walls
+            if (mybottom > 720){rightPaddle.y = 720 - rightPaddle.height;}
+            if (mytop < 0){rightPaddle.y = 0 - rightPaddle.height;}
+        }
+        if (type == "ball" ){
+            //check for collision with outer walls and also scoring
+            if (mybottom > 720){ball.speedY = -5;}
+            if (mytop < 0){ball.speedY = 5;}
+            if (myright > 1210){} //check to see if it went past the right paddle
+            if (myleft < 0){} //check for left paddle
         }
 
-        return inBounds;
-
+        return collision;
     }
+}
+
+function collisionChecks(){
+
 }
 
 //update loop
@@ -162,10 +169,10 @@ function update(){
             //DISABLED FOR NOW, testing is easier with the keyboard
             //rightPaddle.y = game.y; 
         }
-        if (!rightPaddle.outOfBounds()){
-            rightPaddle.y = 720 - rightPaddle.height;
-            console.log("outofbounds");
-        }
+
+
+        if (rightPaddle.outOfBounds()){}
+
         //draw / update game objects
         net();
         
