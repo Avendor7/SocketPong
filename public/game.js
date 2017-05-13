@@ -10,11 +10,13 @@ var player2Score;
 function init() {
 
     //game pieces
-    player1Paddle = new component(20, 100, "white", 70, 120);
-    player2Paddle = new component(20, 100, "white", 1200, 120);
+    player1Paddle = new component(20, 100, "white", 60, 120);
+    player2Paddle = new component(20, 100, "black", 1200, 120);
 
     player1Score = new scoreNumbers(30, 30, "green", 10, 120);
     player2Score = new scoreNumbers(30, 30, "green", 10, 120);
+    
+    //start the game
     game.start();
 }
 
@@ -27,18 +29,17 @@ var game = {
         this.context = this.canvas.getContext("2d");
         this.interval = setInterval(update, 20);
         //background
-        this.context.fillStyle= 'black';
         this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
         //input
-        // window.addEventListener('keydown', function (e) {
-        //     e.preventDefault();
-        //     game.keys = (game.keys || []);
-        //     game.keys[e.keyCode] = (e.type == "keydown");
-        // });
-        // window.addEventListener('keyup', function (e) {
-        //     game.keys[e.keyCode] = (e.type == "keydown");
-        // });
+        window.addEventListener('keydown', function (e) {
+            e.preventDefault();
+            game.keys = (game.keys || []);
+            game.keys[e.keyCode] = (e.type == "keydown");
+        });
+        window.addEventListener('keyup', function (e) {
+            game.keys[e.keyCode] = (e.type == "keydown");
+        });
     },
     stop : function() {
         clearInterval(this.interval);
@@ -69,13 +70,12 @@ function component(width, height, color, x, y) {
         context.fillRect(this.x, this.y, this.width, this.height);
     }
     this.newPos = function() {
-        this.x += this.speedX;
-        this.y += this.speedY; 
+        this.y += this.speed; 
     }
 
     //check for collison with another object 
     this.crashWith = function(otherobj) {
-        //
+        
         var myleft = this.x;
         var myright = this.x + (this.width);
         var mytop = this.y;
@@ -104,13 +104,22 @@ function component(width, height, color, x, y) {
 function update(){
     //if collision, stop the game, else, update all the things
     // if (myGamePiece.crashWith(myObstacle)) {
-    //     myGameArea.stop();
+    //     mygame.stop();
     // } else {
-    //     myGameArea.clear();
+    //     mygame.clear();
     //     myObstacle.update();
     //     myGamePiece.newPos(); 
     //     myGamePiece.update();
     // }
+    game.clear();
+
+    player1Paddle.speed = 0;
+    
+    if (game.keys && game.keys[38]) {player1Paddle.speed = -10; }
+    if (game.keys && game.keys[40]) {player1Paddle.speed = 10; }
+    player1Paddle.newPos();
     player1Paddle.update();
+
+    player2Paddle.newPos();
     player2Paddle.update();
 }
