@@ -69,7 +69,8 @@ function component(width, height, color, x, y) {
         context.fillRect(this.x, this.y, this.width, this.height);
     }
     this.newPos = function() {
-        this.y += this.speed; 
+        this.y += this.speedY;
+        this.x += this.speedX;  
     }
 
     //check for collison with another object 
@@ -113,15 +114,15 @@ function update(){
         ball.speed = 5;
         
         //keyboard movement
-        if (game.keys && game.keys[38]) {rightPaddle.speed = -10; }
-        if (game.keys && game.keys[40]) {rightPaddle.speed = 10; }
+        if (game.keys && game.keys[38]) {rightPaddle.speedY = -10; }
+        if (game.keys && game.keys[40]) {rightPaddle.speedY = 10; }
 
         //mouse movement, y axis only
         if (game.y) {
             //DISABLED FOR NOW, testing is easier with the keyboard
             //rightPaddle.y = game.y; 
         }
-        console.log(rightPaddle.y);
+
         leftPaddle.newPos();
         leftPaddle.update();
 
