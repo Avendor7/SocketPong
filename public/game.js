@@ -2,12 +2,12 @@
 function init() {
 
     //game pieces
-    leftPaddle = new component(20, 100, "white", 60, 120);
-    rightPaddle = new component(20, 100, "white", 1200, 120);
+    leftPaddle = new component(20, 120, "white", 60, 120);
+    rightPaddle = new component(20, 120, "white", 1200, 120);
     ball = new component(10, 10, "white", 300, 300);
     rightScore = new scoreNumbers(3, 320, 80);
     leftScore = new scoreNumbers(4, 960, 80);
-    
+
     //start the game
     game.start();
 }
@@ -108,8 +108,7 @@ function component(width, height, color, x, y) {
         var othertop = otherobj.y;
         var otherbottom = otherobj.y + (otherobj.height);
 
-        //should maybe re-write this to assume false, rather than assume true and prove wrong - may reduce any possible false positives
-        var crash = true;
+         var crash = true;
         
         if ((mybottom < othertop) ||
                (mytop > otherbottom) ||
@@ -119,6 +118,25 @@ function component(width, height, color, x, y) {
         }
         return crash;
     }
+    //check for out of bounds on paddle and ball
+    this.outOfBounds = function(){
+        var myleft = this.x;
+        var myright = this.x + (this.width);
+        var mytop = this.y;
+        var mybottom = this.y + (this.height);
+
+        var inBounds = true;
+
+        if ((mybottom > 720 - this.height) ||
+            (mytop < 0) ||
+            (myright > 1280 - this.width) ||
+            (myleft < 0)) {
+                inBounds = false;
+        }
+
+        return inBounds;
+
+    }
 }
 
 //update loop
@@ -126,7 +144,7 @@ function update(){
     //if collision, stop the game, else, update all the things
     if (rightPaddle.crashWith(ball)) {
         game.stop();
-    } else {
+    }else {
         game.clear();
         
 
@@ -144,7 +162,10 @@ function update(){
             //DISABLED FOR NOW, testing is easier with the keyboard
             //rightPaddle.y = game.y; 
         }
-
+        if (!rightPaddle.outOfBounds()){
+            rightPaddle.y = 720 - rightPaddle.height;
+            console.log("outofbounds");
+        }
         //draw / update game objects
         net();
         
@@ -159,6 +180,7 @@ function update(){
 
         rightPaddle.newPos();
         rightPaddle.update();
+
     }
     
 }
