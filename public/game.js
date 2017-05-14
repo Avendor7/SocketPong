@@ -6,9 +6,9 @@
 function init() {
 
     //game pieces 
-    leftPaddle = new component(20, 120, "white", 60, 120, "paddle", 0, 0);
-    rightPaddle = new component(20, 120, "white", 1200, 120, "paddle", 0, 0);
-    ball = new component(10, 10, "white", 300, 300, "ball", 5, 5);
+    leftPaddle = new paddle(20, 120, "white", 60, 120, "paddle", 0, 0);
+    rightPaddle = new paddle(20, 120, "white", 1200, 120, "paddle", 0, 0);
+    ball = new ball(10, 10, "white", 300, 300, "ball", 5, 5);
     rightScore = new scoreNumbers(0, 320, 80);
     leftScore = new scoreNumbers(0, 960, 80);
 
@@ -82,8 +82,44 @@ function net(){
     context.lineTo(637, 720);
     context.stroke();
 }
-//game object
-function component(width, height, color, x, y, type,speedX, speedY) {
+//crash detection done on the ball, not the paddle
+//paddle object
+function paddle(width, height, color, x, y) {
+    //object attributes
+    this.width = width;
+    this.height = height;
+    this.speedX = 0;
+    this.speedY = 0; 
+    this.x = x;
+    this.y = y;
+
+    //functions called by update loop
+    //update draws the object to the screen,
+    this.update = function() {
+        context = game.context;
+        context.fillStyle = color;
+        context.fillRect(this.x, this.y, this.width, this.height);
+    }
+    // newPos gives it a new x and y position on each redraw
+    this.newPos = function() {
+        this.y += this.speedY;
+        this.x += this.speedX;  
+    }
+
+    //check for out of bounds on paddle and ball
+    this.outOfBounds = function(){
+        var myleft = this.x;
+        var myright = this.x + (this.width);
+        var mytop = this.y;
+        var mybottom = this.y + (this.height);
+        //check top and bottom boundaries
+        if (mybottom > 720){this.y = 720 - this.height;}
+        if (mytop < 0){this.y = 0}    
+    }
+}
+
+//ball object
+function ball(width, height, color, x, y,speedX, speedY) {
     //object attributes
     this.width = width;
     this.height = height;
@@ -134,24 +170,12 @@ function component(width, height, color, x, y, type,speedX, speedY) {
         var mytop = this.y;
         var mybottom = this.y + (this.height);
 
-        var collision = false;
-
-        if (type == "paddle" && this.x == 1200){ //right paddle
-            //check for collision with top and bottom walls
-            if (mybottom > 720){rightPaddle.y = 720 - rightPaddle.height;}
-            if (mytop < 0){rightPaddle.y = 0 - rightPaddle.height;}
-            
-        }
-        if (type == "ball"){
-            //check for collision with outer walls and also scoring
-            this.speedX =5;
-            if (mybottom > 720){ball.speedY = -5;}
-            if (mytop < 0){ball.speedY = 5;}
-            if (myright > 1210){} //check to see if it went past the right paddle
-            if (myleft < 0){} //check for left paddle
-        }
-
-        return collision;
+        //check for collision with outer walls and also scoring
+        this.speedX = 5;
+        if (mybottom > 720){ball.speedY = -5;}
+        if (mytop < 0){ball.speedY = 5;}
+        if (myright > 1210){} //check to see if it went past the right paddle
+        if (myleft < 0){} //check for left paddle
     }
 }
 
@@ -165,15 +189,7 @@ function update(){
     
 
     //if collision, stop the game, else, update all the things
-    if (rightPaddle.crashWith(ball)) {
-        
-        //update score
-        
-    }else if(leftPaddle.crashWith(ball)){
-
-        //update score
-    }
-    else {
+    
         game.clear();
         
 
@@ -181,9 +197,11 @@ function update(){
         leftPaddle.speedY = 0;
         
         //keyboard movement
+        if (game.keys && game.keys[38]) {leftPaddle.speedY = -10; }
+        if (game.keys && game.keys[40]) {leftPaddle.speedY = 10; }
+
         if (game.keys && game.keys[38]) {rightPaddle.speedY = -10; }
         if (game.keys && game.keys[40]) {rightPaddle.speedY = 10; }
-
         //mouse movement, y axis only
         if (game.y) {
             //DISABLED FOR NOW, testing is easier with the keyboard
@@ -192,6 +210,7 @@ function update(){
 
 
         if (rightPaddle.outOfBounds()){}
+        if (leftPaddle.outOfBounds()){}
 
         ball.outOfBounds();
         //initialize socket
@@ -207,13 +226,13 @@ function update(){
         
         ball.newPos();
         ball.update();
-
+        
         leftPaddle.newPos();
         leftPaddle.update();
-
+        console.log("before"+rightPaddle.y);
         rightPaddle.newPos();
         rightPaddle.update();
-
+        console.log("after"+rightPaddle.y);
     }
     
-}
+
