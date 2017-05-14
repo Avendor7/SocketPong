@@ -19,4 +19,20 @@ AI with server
 client sends ball location, server sends paddle x and y coordinates back and moves appropriatly
 if the ball collides with a paddle, it bounces back, if it doesn't and goes past the paddle, score is increased. 
 
-Should probably have a key or HTML button that resets the scores, starts and stops the game, etc. Probably in the header or footer of the game
+Should probably have a key or HTML button that resets the scores, starts and stops the game, etc. Probably in the header or footer of the game\
+
+
+
+TODO:
+
+1. rewrite the component function, separating the ball and the paddle code 
+2. make sure bouncing of the ball and collision is working between paddles and the ball
+3. send ball data to server - make sure it receives it ok
+4. send 'increase score' to the server based on a hit or miss with paddles
+5. send client updated scores
+6. add buttons to restart, stop, start game
+7. polish everything up - including internal documentation
+8. set up letsencrypt on digital ocean server
+9. clone game to server, run with PM2
+10. Nginx proxy to PM2
+11. write out external documentation - things to do differently, future additions
