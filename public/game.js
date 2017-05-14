@@ -8,7 +8,7 @@ function init() {
     //game pieces 
     leftPaddle = new paddle(20, 120, "white", 60, 120, "paddle", 0, 0);
     rightPaddle = new paddle(20, 120, "white", 1200, 120, "paddle", 0, 0);
-    ball = new ball(10, 10, "white", 300, 300, "ball", 5, 5);
+    ball = new ball(10, 10, "white", 300, 300, 5, 5);
     rightScore = new scoreNumbers(0, 320, 80);
     leftScore = new scoreNumbers(0, 960, 80);
 
@@ -159,17 +159,15 @@ function ball(width, height, color, x, y, speedX, speedY) {
         //     (myleft > otherright)) {
         //     crash = false;
         // }
-       // console.log("myright " + myright);
+        console.log("myright " + speedX);
         //console.log("otherleft " + otherleft);
         
 
         if (myright > otherleft){
             this.speedX = -5;
             //console.log("hit right paddle");
-        }else{
-            this.speedX = 0;
-        } 
-        //if (myleft > otherright){this.speedX = 5} 
+        }
+        if (myleft > otherright){this.speedX = 5} 
         
     }
     //
@@ -180,8 +178,12 @@ function ball(width, height, color, x, y, speedX, speedY) {
         var mybottom = this.y + (this.height);
 
         //check for collision with outer walls and also scoring
-        
-        if (mybottom > 720){ball.speedY = -5;}
+        var collision = false
+
+        if (mybottom > 720){
+            ball.speedY = -5;
+            collision = true;
+        }
         if (mytop < 0){ball.speedY = 5;}
         //if (myright > 1210){} //check to see if it went past the right paddle
         //if (myleft < 0){} //check for left paddle
@@ -217,9 +219,9 @@ function update(){
         if (rightPaddle.outOfBounds()){}
         if (leftPaddle.outOfBounds()){}
 
-        
         ball.outOfBounds();
         ball.crashWith(rightPaddle);
+        ball.crashWith(leftPaddle);
         //initialize socket
 
         
