@@ -123,7 +123,7 @@ function component(width, height, color, x, y, type,speedX, speedY) {
                (myright < otherleft) ||
                (myleft > otherright)) {
            crash = false;
-           alert("nocrash");
+           
         }
         return crash;
     }
@@ -166,8 +166,14 @@ function update(){
 
     //if collision, stop the game, else, update all the things
     if (rightPaddle.crashWith(ball)) {
-        game.stop();
-    }else {
+        
+        //update score
+        
+    }else if(leftPaddle.crashWith(ball)){
+
+        //update score
+    }
+    else {
         game.clear();
         
 

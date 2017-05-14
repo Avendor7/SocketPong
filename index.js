@@ -15,15 +15,14 @@ app.get('/game.js', function(req, res){
 
 //server side socket.io connections 
 io.on('connection', function(socket){
+    
   console.log('a user connected');
+
   socket.on('disconnect', function(){
+    //reset all variables for next user
     console.log('user disconnected');
   });
 
-  socket.on('disconnect', function(){
-    console.log('user disconnected');
-  });
-  
   socket.emit('scores', {p1:4, p2:3});
 
   socket.emit('ballLocation',{x:200,y:300});
