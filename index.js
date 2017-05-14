@@ -23,7 +23,10 @@ io.on('connection', function(socket){
   socket.on('disconnect', function(){
     console.log('user disconnected');
   });
-  socket.emit('scores', {p1:4, p2:3})
+  
+  socket.emit('scores', {p1:4, p2:3});
+
+  socket.emit('ballLocation',{x:200,y:300});
 });
 
 //listen on port 3000

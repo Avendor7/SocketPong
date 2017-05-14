@@ -2,20 +2,20 @@
 
 
 
+
 function init() {
 
-    //game pieces
-    leftPaddle = new component(20, 120, "white", 60, 120, "paddle");
-    rightPaddle = new component(20, 120, "white", 1200, 120, "paddle");
-    ball = new component(10, 10, "white", 300, 300, "ball");
+    //game pieces 
+    leftPaddle = new component(20, 120, "white", 60, 120, "paddle", 0, 0);
+    rightPaddle = new component(20, 120, "white", 1200, 120, "paddle", 0, 0);
+    ball = new component(10, 10, "white", 300, 300, "ball", 5, 5);
     rightScore = new scoreNumbers(0, 320, 80);
     leftScore = new scoreNumbers(0, 960, 80);
 
+    socket = io();
+
     //start the game
     game.start();
-    socket = io();
-        
-
     
 }
 
@@ -47,7 +47,7 @@ var game = {
             game.y = e.pageY;
         });
 
-        //initialize socket
+        
         
     },
     stop : function() {
@@ -83,12 +83,12 @@ function net(){
     context.stroke();
 }
 //game object
-function component(width, height, color, x, y, type) {
+function component(width, height, color, x, y, type,speedX, speedY) {
     //object attributes
     this.width = width;
     this.height = height;
-    this.speedX = 0;
-    this.speedY = 0; 
+    this.speedX = speedX;
+    this.speedY = speedY; 
     this.x = x;
     this.y = y;
 
@@ -123,6 +123,7 @@ function component(width, height, color, x, y, type) {
                (myright < otherleft) ||
                (myleft > otherright)) {
            crash = false;
+           alert("nocrash");
         }
         return crash;
     }
@@ -139,9 +140,11 @@ function component(width, height, color, x, y, type) {
             //check for collision with top and bottom walls
             if (mybottom > 720){rightPaddle.y = 720 - rightPaddle.height;}
             if (mytop < 0){rightPaddle.y = 0 - rightPaddle.height;}
+            
         }
-        if (type == "ball" ){
+        if (type == "ball"){
             //check for collision with outer walls and also scoring
+            this.speedX =5;
             if (mybottom > 720){ball.speedY = -5;}
             if (mytop < 0){ball.speedY = 5;}
             if (myright > 1210){} //check to see if it went past the right paddle
@@ -170,8 +173,6 @@ function update(){
 
         rightPaddle.speedY = 0;
         leftPaddle.speedY = 0;
-        ball.speedX = 5;
-        ball.speedY = 5;
         
         //keyboard movement
         if (game.keys && game.keys[38]) {rightPaddle.speedY = -10; }
@@ -186,6 +187,7 @@ function update(){
 
         if (rightPaddle.outOfBounds()){}
 
+        ball.outOfBounds();
         //initialize socket
 
         
