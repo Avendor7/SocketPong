@@ -1,15 +1,22 @@
 //initialize all the things
+
+
+
 function init() {
 
     //game pieces
     leftPaddle = new component(20, 120, "white", 60, 120, "paddle");
     rightPaddle = new component(20, 120, "white", 1200, 120, "paddle");
     ball = new component(10, 10, "white", 300, 300, "ball");
-    rightScore = new scoreNumbers(3, 320, 80);
-    leftScore = new scoreNumbers(4, 960, 80);
+    rightScore = new scoreNumbers(0, 320, 80);
+    leftScore = new scoreNumbers(0, 960, 80);
 
     //start the game
     game.start();
+    socket = io();
+        
+
+    
 }
 
 //main game object
@@ -39,6 +46,9 @@ var game = {
             game.x = e.pageX;
             game.y = e.pageY;
         });
+
+        //initialize socket
+        
     },
     stop : function() {
         clearInterval(this.interval);
@@ -47,7 +57,7 @@ var game = {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
 }
-
+//drawing the scores
 function scoreNumbers(score, x, y){
     context = game.context;
     this.x = x;
@@ -148,6 +158,9 @@ function collisionChecks(){
 
 //update loop
 function update(){
+
+    
+
     //if collision, stop the game, else, update all the things
     if (rightPaddle.crashWith(ball)) {
         game.stop();
@@ -173,8 +186,13 @@ function update(){
 
         if (rightPaddle.outOfBounds()){}
 
+        //initialize socket
+
+        
+
         //draw / update game objects
         net();
+        
         
         rightScore.update();
         leftScore.update();
