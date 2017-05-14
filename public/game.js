@@ -119,7 +119,7 @@ function paddle(width, height, color, x, y) {
 }
 
 //ball object
-function ball(width, height, color, x, y,speedX, speedY) {
+function ball(width, height, color, x, y, speedX, speedY) {
     //object attributes
     this.width = width;
     this.height = height;
@@ -152,18 +152,27 @@ function ball(width, height, color, x, y,speedX, speedY) {
         var othertop = otherobj.y;
         var otherbottom = otherobj.y + (otherobj.height);
 
-         var crash = true;
         
-        if ((mybottom < othertop) ||
-               (mytop > otherbottom) ||
-               (myright < otherleft) ||
-               (myleft > otherright)) {
-           crash = false;
-           
-        }
-        return crash;
+        // if ((mybottom < othertop) ||
+        //     (mytop > otherbottom) ||
+        //     (myright < otherleft) ||
+        //     (myleft > otherright)) {
+        //     crash = false;
+        // }
+       // console.log("myright " + myright);
+        //console.log("otherleft " + otherleft);
+        
+
+        if (myright > otherleft){
+            this.speedX = -5;
+            //console.log("hit right paddle");
+        }else{
+            this.speedX = 0;
+        } 
+        //if (myleft > otherright){this.speedX = 5} 
+        
     }
-    //check for out of bounds on paddle and ball
+    //
     this.outOfBounds = function(){
         var myleft = this.x;
         var myright = this.x + (this.width);
@@ -171,16 +180,12 @@ function ball(width, height, color, x, y,speedX, speedY) {
         var mybottom = this.y + (this.height);
 
         //check for collision with outer walls and also scoring
-        this.speedX = 5;
+        
         if (mybottom > 720){ball.speedY = -5;}
         if (mytop < 0){ball.speedY = 5;}
-        if (myright > 1210){} //check to see if it went past the right paddle
-        if (myleft < 0){} //check for left paddle
+        //if (myright > 1210){} //check to see if it went past the right paddle
+        //if (myleft < 0){} //check for left paddle
     }
-}
-
-function collisionChecks(){
-
 }
 
 //update loop
@@ -212,7 +217,9 @@ function update(){
         if (rightPaddle.outOfBounds()){}
         if (leftPaddle.outOfBounds()){}
 
+        
         ball.outOfBounds();
+        ball.crashWith(rightPaddle);
         //initialize socket
 
         
@@ -221,18 +228,19 @@ function update(){
         net();
         
         
+
         rightScore.update();
         leftScore.update();
+        
         
         ball.newPos();
         ball.update();
         
+        
         leftPaddle.newPos();
         leftPaddle.update();
-        console.log("before"+rightPaddle.y);
         rightPaddle.newPos();
         rightPaddle.update();
-        console.log("after"+rightPaddle.y);
     }
     
 

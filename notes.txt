@@ -9,7 +9,9 @@ Q: Why not use a game library/engine
 A: I haven't really worked with any and wanted to keep the project as simple as possible, same goes for Express and is static files.
 
 
+Known Bugs
 
+scores aren't entirely centre - need to be adjusted to the centre, not top left
 
 
 
@@ -26,13 +28,15 @@ Should probably have a key or HTML button that resets the scores, starts and sto
 TODO:
 
 1. rewrite the component function, separating the ball and the paddle code 
+
 2. make sure bouncing of the ball and collision is working between paddles and the ball
 3. send ball data to server - make sure it receives it ok
-4. send 'increase score' to the server based on a hit or miss with paddles
-5. send client updated scores
-6. add buttons to restart, stop, start game
-7. polish everything up - including internal documentation
-8. set up letsencrypt on digital ocean server
-9. clone game to server, run with PM2
-10. Nginx proxy to PM2
-11. write out external documentation - things to do differently, future additions
+4. Add AI based on the location of the ball - set x and y of leftPaddle
+5. send 'increase score' to the server based on a hit or miss with paddles
+6. send client updated scores
+7. add buttons to restart, stop, start game
+8. polish everything up - including internal documentation
+9. set up letsencrypt on digital ocean server
+10. clone game to server, run with PM2
+11. Nginx proxy to PM2
+12. write out external documentation - things to do differently, future additions
