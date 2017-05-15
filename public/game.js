@@ -151,26 +151,30 @@ function ball(width, height, color, x, y, speedX, speedY) {
         var otherright = otherobj.x + (otherobj.width);
         var othertop = otherobj.y;
         var otherbottom = otherobj.y + (otherobj.height);
-
         
-        // if ((mybottom < othertop) ||
-        //     (mytop > otherbottom) ||
-        //     (myright < otherleft) ||
-        //     (myleft > otherright)) {
-        //     crash = false;
+        
+        // if (myleft == 80 && myleft >= otherright){
+        //     this.speedX = 5;
+        //     console.log("hit 80");
         // }
-        console.log("myright " + speedX);
-        //console.log("otherleft " + otherleft);
-        
+        // if (myright == 1200 && myright >= otherleft){
+        //     this.speedX = -5;
+        //     console.log("hit 1200");
+        // }
 
-        if (myright > otherleft){
-            this.speedX = -5;
-            //console.log("hit right paddle");
+       if ((mybottom < othertop) || (mytop > otherbottom) || (myright < otherleft) || (myleft > otherright)){
+            //console.log("didnt hit");
+        }else{
+            if (myright == 1200){
+                this.speedX = -5;
+                console.log("hit right");
+            }else if(myleft == 60){
+                this.speedX = 5;
+                console.log("hit left");
+            }
         }
-        if (myleft > otherright){this.speedX = 5} 
         
     }
-    //
     this.outOfBounds = function(){
         var myleft = this.x;
         var myright = this.x + (this.width);
@@ -180,10 +184,7 @@ function ball(width, height, color, x, y, speedX, speedY) {
         //check for collision with outer walls and also scoring
         var collision = false
 
-        if (mybottom > 720){
-            ball.speedY = -5;
-            collision = true;
-        }
+        if (mybottom > 720){ball.speedY = -5;}
         if (mytop < 0){ball.speedY = 5;}
         //if (myright > 1210){} //check to see if it went past the right paddle
         //if (myleft < 0){} //check for left paddle
