@@ -1,45 +1,51 @@
 Socket Pong external documentation
 
+The game is a simple Pong clone. Player is the right paddle, aim to get get the ball past the other paddle. 
+I am using web sockets for the client to tell the server what the ball's location is, if it is out of bounds on the X axis (<0 and >1280) then it would tell the client someone scored.
+The server also keeps track of the score, and sends it to the client.
+
 Q/A
 
-Q: Why is the game vertical, not horizontal like classic Pong?
-A: Make use of the screen real-estate on mobile without having to turn the phone. 
+Q: The game is broken, why?
+A: This was the first time I have written a Javascript game since highschool, so im a little rusty, and its also my first time working with Web Sockets (socket.io). 
+    The websockets work, but some of the game logic is a bit broken under some certain circumstances - See known bugs below
+
+Q: Why Pong? 
+A: Pong is still fun? Right? - It was simple enough to implement in a few days
 
 Q: Why not use a game library/engine
-A: I haven't really worked with any and wanted to keep the project as simple as possible, same goes for Express and is static files.
+A: I haven't really worked with any and wanted to keep the project as simple as possible, same goes for Express and its static files.
+
+Q: AI is pretty terrible
+A: Time constraints. 
+
+Q: Multiplayer?
+A: It was something I did want to implement - an Overwatch-esque matchmaker similar to their play vs AI mode, but it got pushed out of scope pretty fast.
+
+Q: Do you plan on continuing this project?
+A: Probably. I have come this far, might as well polish it up more, add multiplayer. Sockets are fun. 
+
+Q: What would you do differently?
+A: Move a lot more of the code to the client. Basically everything except the canvas graphics code. This would help with any cheating as well, as client side javascript is easy to modify.
+    It would have removed some of the bad code involved like my workaround to get the ball to reset.
+    Clean up the code more, better variable names etc.
+    Difficulty would have been nice to implement, it would be just a matter of changing the sizes of the paddles, making the ball slower, AI paddle slower etc.
+    Allow for more than one instance of the game to run at once, done with usernames, generated socket.io room id's and a lobby to find games. 
 
 
 Known Bugs
 
-scores aren't entirely centre - need to be adjusted to the centre, not top left
+1. Scores aren't entirely centre - need to be adjusted to the centre, not top left
+2. The collision on the paddles are basically broken, the first hit works, but after the server resets the ball its broken.
+3. Reset button doesn't work.
+4. Only one instance of the game will work at once.
 
 
 
-AI with server
-    all logic is client side, but the server can send its paddle x and y based on ball location
-
-client sends ball location, server sends paddle x and y coordinates back and moves appropriatly
-if the ball collides with a paddle, it bounces back, if it doesn't and goes past the paddle, score is increased. 
-
-Should probably have a key or HTML button that resets the scores, starts and stops the game, etc. Probably in the header or footer of the game\
+Hopefully by the time you are reading this I have put the project on the internet, probably Monday (May 15th) or Tuesday (May 16th) 
+It should be avalible at http://159.203.5.222 or https://159.203.5.222 with a Digital Ocean Ubuntu Server. I will be buying a cheap domain for it, probably http://socketpong.space. 
 
 
+Feel free to contact me with any questions!
 
-TODO:
-
-    1. rewrite the component function, separating the ball and the paddle code 
-    2. make sure bouncing of the ball and collision is working between paddles and the ball
-    3. send ball data to server - make sure it receives it ok
-4. Add AI based on the location of the ball - set x and y of leftPaddle
-5. send 'increase score' to the server based on a hit or miss with paddles
-6. send client updated scores
-7. add buttons to restart, stop, start game
-8. polish everything up - including internal documentation
-9. set up letsencrypt on digital ocean server
-10. clone game to server, run with PM2
-11. Nginx proxy to PM2
-12. write out external documentation - things to do differently, future additions
-
-
-
-Whoever scores gets next serve by placing the ball in the other players court
+Stephen
