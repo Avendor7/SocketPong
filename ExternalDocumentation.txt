@@ -41,7 +41,6 @@ Known Bugs
 4. Only one instance of the game will work at once.
 
 
-
 Hopefully by the time you are reading this I have put the project on the internet, probably Monday (May 15th) or Tuesday (May 16th) 
 It should be avalible at http://159.203.5.222 or https://159.203.5.222 with a Digital Ocean Ubuntu Server. I will be buying a cheap domain for it, probably http://socketpong.space. 
 
