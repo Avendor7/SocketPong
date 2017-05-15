@@ -1,8 +1,4 @@
 //initialize all the things
-
-
-
-
 function init() {
 
     //game pieces 
@@ -13,6 +9,7 @@ function init() {
     leftScore = new scoreNumbers(0, 960, 80);
 
     socket = io();
+    
 
     //start the game
     game.start();
@@ -64,7 +61,7 @@ function scoreNumbers(score, x, y){
     this.y = y;
     this.score = score;
     
-    this.update = function() {
+    this.update = function(score) {
         context.fillStyle = "white";
         context.font = "bold 80px Arial";
         context.fillText(this.score, this.x, this.y);
@@ -136,7 +133,9 @@ function ball(width, height, color, x, y, speedX, speedY) {
     }
     this.newPos = function() {
         this.y += this.speedY;
-        this.x += this.speedX;  
+        this.x += this.speedX;
+        //send ball information to server
+
     }
 
     //check for collison with another object 
@@ -193,57 +192,53 @@ function ball(width, height, color, x, y, speedX, speedY) {
 
 //update loop
 function update(){
+    game.clear();
 
+    rightPaddle.speedY = 0;
+    leftPaddle.speedY = 0;
     
+    //keyboard movement
+    if (game.keys && game.keys[38]) {leftPaddle.speedY = -10; }
+    if (game.keys && game.keys[40]) {leftPaddle.speedY = 10; }
 
-    //if collision, stop the game, else, update all the things
-    
-        game.clear();
-        
-
-        rightPaddle.speedY = 0;
-        leftPaddle.speedY = 0;
-        
-        //keyboard movement
-        if (game.keys && game.keys[38]) {leftPaddle.speedY = -10; }
-        if (game.keys && game.keys[40]) {leftPaddle.speedY = 10; }
-
-        if (game.keys && game.keys[38]) {rightPaddle.speedY = -10; }
-        if (game.keys && game.keys[40]) {rightPaddle.speedY = 10; }
-        //mouse movement, y axis only
-        if (game.y) {
-            //DISABLED FOR NOW, testing is easier with the keyboard
-            //rightPaddle.y = game.y; 
-        }
-
-
-        if (rightPaddle.outOfBounds()){}
-        if (leftPaddle.outOfBounds()){}
-
-        ball.outOfBounds();
-        ball.crashWith(rightPaddle);
-        ball.crashWith(leftPaddle);
-        //initialize socket
-
-        
-
-        //draw / update game objects
-        net();
-        
-        
-
-        rightScore.update();
-        leftScore.update();
-        
-        
-        ball.newPos();
-        ball.update();
-        
-        
-        leftPaddle.newPos();
-        leftPaddle.update();
-        rightPaddle.newPos();
-        rightPaddle.update();
+    if (game.keys && game.keys[38]) {rightPaddle.speedY = -10; }
+    if (game.keys && game.keys[40]) {rightPaddle.speedY = 10; }
+    //mouse movement, y axis only
+    if (game.y) {
+        //DISABLED FOR NOW, testing is easier with the keyboard
+        //rightPaddle.y = game.y; 
     }
+
+
+    if (rightPaddle.outOfBounds()){}
+    if (leftPaddle.outOfBounds()){}
+
+    ball.outOfBounds();
+    ball.crashWith(rightPaddle);
+    ball.crashWith(leftPaddle);
+    //send socket information
+    
+    socket.emit('ballPos', {x:ball.x, y:ball.y});
+        //socket.emit('scores', {player1: , player2: });
+  
+
+    //draw / update game objects
+    net();
+    
+    
+    rightScore.score = 4;
+    rightScore.update();
+    leftScore.update();
+    
+    
+    ball.newPos();
+    ball.update();
+    
+    
+    leftPaddle.newPos();
+    leftPaddle.update();
+    rightPaddle.newPos();
+    rightPaddle.update();
+}
     
 

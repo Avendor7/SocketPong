@@ -15,17 +15,21 @@ app.get('/game.js', function(req, res){
 
 //server side socket.io connections 
 io.on('connection', function(socket){
-    
-  console.log('a user connected');
+    //someone has connected
+    console.log('a user connected');
+    //receive ball position from client
+    socket.on('ballPos', function(position){
+        console.log("X: " + position.x + " Y: " + position.y)
+    });
 
-  socket.on('disconnect', function(){
-    //reset all variables for next user
-    console.log('user disconnected');
-  });
+    socket.on('disconnect', function(){
+        //reset all variables for next user
+        console.log('user disconnected');
+    });
 
-  socket.emit('scores', {p1:4, p2:3});
+    socket.emit('scores', {p1:4, p2:3});
 
-  socket.emit('ballLocation',{x:200,y:300});
+    socket.emit('ballLocation',{x:200,y:300});
 });
 
 //listen on port 3000
