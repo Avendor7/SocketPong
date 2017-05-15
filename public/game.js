@@ -5,8 +5,8 @@ function init() {
     leftPaddle = new paddle(20, 120, "white", 60, 120, "paddle", 0, 0);
     rightPaddle = new paddle(20, 120, "white", 1200, 120, "paddle", 0, 0);
     ball = new ball(10, 10, "white", 300, 300, 5, 5);
-    rightScore = new scoreNumbers(0, 320, 80);
-    leftScore = new scoreNumbers(0, 960, 80);
+    leftScore = new scoreNumbers(0, 320, 80);
+    rightScore = new scoreNumbers(0, 960, 80);
 
     socket = io();
     
@@ -217,16 +217,18 @@ function update(){
     ball.crashWith(rightPaddle);
     ball.crashWith(leftPaddle);
     //send socket information
-    
+
     socket.emit('ballPos', {x:ball.x, y:ball.y});
         //socket.emit('scores', {player1: , player2: });
-  
+    socket.on('scores', function(scores){
+        leftScore.score = scores.p2;
+        rightScore.score = scores.p1;
+    });
 
     //draw / update game objects
     net();
     
     
-    rightScore.score = 4;
     rightScore.update();
     leftScore.update();
     

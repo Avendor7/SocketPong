@@ -20,6 +20,7 @@ io.on('connection', function(socket){
     //receive ball position from client
     socket.on('ballPos', function(position){
         console.log("X: " + position.x + " Y: " + position.y)
+        socket.emit('scores', {p1:6, p2:1});
     });
 
     socket.on('disconnect', function(){
@@ -27,7 +28,7 @@ io.on('connection', function(socket){
         console.log('user disconnected');
     });
 
-    socket.emit('scores', {p1:4, p2:3});
+    
 
     socket.emit('ballLocation',{x:200,y:300});
 });
