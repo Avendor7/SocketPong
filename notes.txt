@@ -28,8 +28,8 @@ Should probably have a key or HTML button that resets the scores, starts and sto
 TODO:
 
 1. rewrite the component function, separating the ball and the paddle code 
-
 2. make sure bouncing of the ball and collision is working between paddles and the ball
+
 3. send ball data to server - make sure it receives it ok
 4. Add AI based on the location of the ball - set x and y of leftPaddle
 5. send 'increase score' to the server based on a hit or miss with paddles
