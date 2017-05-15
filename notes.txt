@@ -39,3 +39,7 @@ TODO:
 10. clone game to server, run with PM2
 11. Nginx proxy to PM2
 12. write out external documentation - things to do differently, future additions
+
+
+
+Whoever scores gets next serve by placing the ball in the other players court

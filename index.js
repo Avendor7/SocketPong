@@ -18,19 +18,46 @@ io.on('connection', function(socket){
     //someone has connected
     console.log('a user connected');
     //receive ball position from client
+    var player1Score = 0;
+    var player2Score = 0;
+    var leftPaddlePosX = 60;
+    var leftPaddlePosY = 300;
+    var paddleSpeed = 7;
+    var player1Goal = false; //true of someone scores
+    var player2Goal = false; //true of someone scores
+
     socket.on('ballPos', function(position){
-        console.log("X: " + position.x + " Y: " + position.y)
-        socket.emit('scores', {p1:6, p2:1});
+        player1Goal = false;
+        player2Goal = false;
+        //determine scores and reset the board
+        if (position.x < 0){
+            player1Score ++;
+            player1Goal=true;
+        }
+
+        if (position.x > 1280){
+            player2Score ++;
+            player2Goal=true;
+        }
+        //paddle "AI"
+        if (leftPaddlePosY < 0 ){
+            paddleSpeed = 7;
+        }else if (leftPaddlePosY > 600 ){
+            paddleSpeed = - 7;
+        }
+        leftPaddlePosY += paddleSpeed;
+        //send all the data back to the client
+        socket.emit('resetBall', {player1Goal:player1Goal, player2Goal:player2Goal});
+
+        socket.emit('leftPaddlePos',{x:leftPaddlePosX, y:leftPaddlePosY});
+
+        socket.emit('scores', {p1:player1Score, p2:player2Score});
     });
 
     socket.on('disconnect', function(){
         //reset all variables for next user
         console.log('user disconnected');
     });
-
-    
-
-    socket.emit('ballLocation',{x:200,y:300});
 });
 
 //listen on port 3000

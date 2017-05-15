@@ -5,8 +5,8 @@ function init() {
     leftPaddle = new paddle(20, 120, "white", 60, 120, "paddle", 0, 0);
     rightPaddle = new paddle(20, 120, "white", 1200, 120, "paddle", 0, 0);
     ball = new ball(10, 10, "white", 300, 300, 5, 5);
-    leftScore = new scoreNumbers(0, 320, 80);
-    rightScore = new scoreNumbers(0, 960, 80);
+    leftScore = new scoreNumbers(0, 320, 80); //player 1
+    rightScore = new scoreNumbers(0, 960, 80); //player 2
 
     socket = io();
     
@@ -43,9 +43,6 @@ var game = {
             game.x = e.pageX;
             game.y = e.pageY;
         });
-
-        
-        
     },
     stop : function() {
         clearInterval(this.interval);
@@ -67,10 +64,10 @@ function scoreNumbers(score, x, y){
         context.fillText(this.score, this.x, this.y);
     }
 }
-
+//broken centre line 
 function net(){
     context = game.context;
-    //broken centre line 
+    
     context.beginPath();
     context.strokeStyle = 'white';
     context.lineWidth = 6;
@@ -134,8 +131,6 @@ function ball(width, height, color, x, y, speedX, speedY) {
     this.newPos = function() {
         this.y += this.speedY;
         this.x += this.speedX;
-        //send ball information to server
-
     }
 
     //check for collison with another object 
@@ -151,15 +146,6 @@ function ball(width, height, color, x, y, speedX, speedY) {
         var othertop = otherobj.y;
         var otherbottom = otherobj.y + (otherobj.height);
         
-        
-        // if (myleft == 80 && myleft >= otherright){
-        //     this.speedX = 5;
-        //     console.log("hit 80");
-        // }
-        // if (myright == 1200 && myright >= otherleft){
-        //     this.speedX = -5;
-        //     console.log("hit 1200");
-        // }
 
        if ((mybottom < othertop) || (mytop > otherbottom) || (myright < otherleft) || (myleft > otherright)){
             //console.log("didnt hit");
@@ -198,47 +184,65 @@ function update(){
     leftPaddle.speedY = 0;
     
     //keyboard movement
-    if (game.keys && game.keys[38]) {leftPaddle.speedY = -10; }
-    if (game.keys && game.keys[40]) {leftPaddle.speedY = 10; }
-
     if (game.keys && game.keys[38]) {rightPaddle.speedY = -10; }
     if (game.keys && game.keys[40]) {rightPaddle.speedY = 10; }
+    
     //mouse movement, y axis only
     if (game.y) {
-        //DISABLED FOR NOW, testing is easier with the keyboard
-        //rightPaddle.y = game.y; 
+        rightPaddle.y = game.y; 
     }
 
-
+    //check boundaries
     if (rightPaddle.outOfBounds()){}
     if (leftPaddle.outOfBounds()){}
 
     ball.outOfBounds();
     ball.crashWith(rightPaddle);
     ball.crashWith(leftPaddle);
-    //send socket information
 
+    
+
+    //send the ball position
     socket.emit('ballPos', {x:ball.x, y:ball.y});
-        //socket.emit('scores', {player1: , player2: });
+    //receive scores, update the function
     socket.on('scores', function(scores){
         leftScore.score = scores.p2;
         rightScore.score = scores.p1;
     });
+    //receive Paddle position for the AI (left paddle)
+    socket.on('leftPaddlePos', function(position){
+        leftPaddle.x = position.x;
+        leftPaddle.y = position.y;
+    });
+
+   //determine if the ball needs resetting
+    socket.on('resetBall', function(result){
+        if (result.player1Goal == true){
+            ball.x = 852;
+            ball.y = 300;
+            ball.x += ball.speedX;
+            ball.y += ball.speedY;
+        }else if (result.player2Goal == true){
+            console.log("p2 score")
+            ball.x = 426;
+            ball.y = 300;
+            ball.x += ball.speedX;
+            ball.y += ball.speedY;
+        }
+        
+    });
 
     //draw / update game objects
     net();
-    
+    ball.newPos();
+    ball.update();
     
     rightScore.update();
     leftScore.update();
     
-    
-    ball.newPos();
-    ball.update();
-    
-    
     leftPaddle.newPos();
     leftPaddle.update();
+
     rightPaddle.newPos();
     rightPaddle.update();
 }
