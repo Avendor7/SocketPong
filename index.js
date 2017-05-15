@@ -34,11 +34,11 @@ io.on('connection', function(socket){
             player1Score ++;
             player1Goal=true;
         }
-
         if (position.x > 1280){
             player2Score ++;
             player2Goal=true;
         }
+
         //paddle "AI"
         if (leftPaddlePosY < 0 ){
             paddleSpeed = 7;
@@ -55,7 +55,7 @@ io.on('connection', function(socket){
     });
 
     socket.on('disconnect', function(){
-        //reset all variables for next user
+        //message the console that someone disconnected
         console.log('user disconnected');
     });
 });

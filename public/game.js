@@ -8,9 +8,9 @@ function init() {
     leftScore = new scoreNumbers(0, 320, 80); //player 1
     rightScore = new scoreNumbers(0, 960, 80); //player 2
 
+    //initialize socket.io
     socket = io();
     
-
     //start the game
     game.start();
     
@@ -46,7 +46,12 @@ var game = {
     },
     stop : function() {
         clearInterval(this.interval);
-    },    
+    },
+    restart : function() {
+        clearInterval(this.interval);
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        game.start();
+    },     
     clear : function() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
@@ -146,9 +151,8 @@ function ball(width, height, color, x, y, speedX, speedY) {
         var othertop = otherobj.y;
         var otherbottom = otherobj.y + (otherobj.height);
         
-
+        //this is messy and doesn't really work right after a ball reset - KNOWN BUG
        if ((mybottom < othertop) || (mytop > otherbottom) || (myright < otherleft) || (myleft > otherright)){
-            //console.log("didnt hit");
         }else{
             if (myright == 1200){
                 this.speedX = -5;
@@ -158,7 +162,6 @@ function ball(width, height, color, x, y, speedX, speedY) {
                 console.log("hit left");
             }
         }
-        
     }
     this.outOfBounds = function(){
         var myleft = this.x;
@@ -171,8 +174,6 @@ function ball(width, height, color, x, y, speedX, speedY) {
 
         if (mybottom > 720){ball.speedY = -5;}
         if (mytop < 0){ball.speedY = 5;}
-        //if (myright > 1210){} //check to see if it went past the right paddle
-        //if (myleft < 0){} //check for left paddle
     }
 }
 
@@ -187,11 +188,6 @@ function update(){
     if (game.keys && game.keys[38]) {rightPaddle.speedY = -10; }
     if (game.keys && game.keys[40]) {rightPaddle.speedY = 10; }
     
-    //mouse movement, y axis only
-    if (game.y) {
-        rightPaddle.y = game.y; 
-    }
-
     //check boundaries
     if (rightPaddle.outOfBounds()){}
     if (leftPaddle.outOfBounds()){}
