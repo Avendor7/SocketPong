@@ -25,7 +25,7 @@ var game = {
         //this.canvas.style.cursor = "none"; //hide cursor
         this.context = this.canvas.getContext("2d");
         //glorious 60fps (16ms)
-        this.interval = setInterval(update, 16);
+        this.interval = setInterval(update, 32);
         //background
         this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
@@ -157,7 +157,7 @@ function ball(width, height, color, x, y, speedX, speedY) {
             if (myright == 1200){
                 this.speedX = -5;
                 console.log("hit right");
-            }else if(myleft == 60){
+            }else if(myleft == 80){
                 this.speedX = 5;
                 console.log("hit left");
             }
@@ -234,6 +234,8 @@ function update(){
     net();
     ball.newPos();
     ball.update();
+    console.log("ballx: " + ball.x + "bally: " + ball.y);
+    
     
     rightScore.update();
     leftScore.update();
