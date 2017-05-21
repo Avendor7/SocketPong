@@ -218,12 +218,14 @@ function update(){
             ball.y = 300;
             ball.x += ball.speedX;
             ball.y += ball.speedY;
+            result.player1Goal = false;
         }else if (result.player2Goal == true){
-            console.log("p2 score")
+            console.log("p2 score");
             ball.x = 426;
             ball.y = 300;
             ball.x += ball.speedX;
             ball.y += ball.speedY;
+            result.player2Goal = false;
         }
         
     });
